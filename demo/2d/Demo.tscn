@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/SceneFactory/factory_2d.gd" type="Script" id=1]
+[ext_resource path="res://demo/2d/ball_2d.tscn" type="PackedScene" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 512, 8 )
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "swing"
+length = 4.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 10.0, 0.0, -10.0 ]
+}
+
+[node name="Demo" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( 512, 528 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D"]
+color = Color( 0.231373, 0.47451, 0.635294, 1 )
+polygon = PoolVector2Array( -512, -16, 512, -16, 512, 16, -512, 16 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StaticBody2D"]
+autoplay = "swing"
+anims/RESET = SubResource( 2 )
+anims/swing = SubResource( 3 )
+
+[node name="Polygon2D2" type="Polygon2D" parent="."]
+position = Vector2( 480, 0 )
+z_index = 1
+color = Color( 0.317647, 0.721569, 0.0470588, 1 )
+polygon = PoolVector2Array( 0, 0, 64, 0, 64, 120, 80, 120, 80, 144, -16, 144, -16, 120, 0, 120 )
+
+[node name="BallFactory" type="Position2D" parent="Polygon2D2"]
+position = Vector2( 32, 112 )
+script = ExtResource( 1 )
+entity_scene = ExtResource( 2 )
+entity_parent_path = NodePath("../..")
+timer_path = NodePath("SpawnTimer")
+
+[node name="SpawnTimer" type="Timer" parent="Polygon2D2/BallFactory"]
+wait_time = 2.0
+autostart = true
