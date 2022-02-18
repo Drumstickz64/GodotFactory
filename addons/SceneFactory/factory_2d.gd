@@ -26,3 +26,4 @@ func spawn() -> void:
 	_entity_parent.add_child(entity)
 	entity.position = global_position
 	entity.set_as_toplevel(set_entity_as_toplevel)
+	emit_signal("spawned")
